@@ -1,0 +1,15 @@
+[package]
+name = "utxo-ram"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+base64 = "0.22.1"
+bitcoin = "0.31.1"
+bitcoincore-rpc = "0.18.0"
+deepsize = "0.2.0"
+hex = "0.4.3"
+miniscript = { git = "https://github.com/pythcoiner/rust-miniscript.git", branch = "substitute_raw_pkh", features = ["base64"]}
+tokio = { version = "1.35.1", features = ["full"] }
