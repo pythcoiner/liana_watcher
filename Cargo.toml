@@ -1,6 +1,6 @@
 [package]
-name = "utxo-ram"
-version = "0.1.0"
+name = "liana_watcher"
+version = "0.0.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,6 +9,7 @@ edition = "2021"
 base64 = "0.22.1"
 bitcoin = "0.31.1"
 bitcoincore-rpc = "0.18.0"
+clap = { version = "4.5.16", features = ["derive"] }
 deepsize = "0.2.0"
 hex = "0.4.3"
 miniscript = { git = "https://github.com/pythcoiner/rust-miniscript.git", branch = "substitute_raw_pkh", features = ["base64"]}

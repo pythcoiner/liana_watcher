@@ -3,6 +3,8 @@ mod errors;
 
 use bitcoin::{Block, Transaction};
 use bitcoincore_rpc::{bitcoin, Auth, Client, RpcApi};
+use clap::Parser as _;
+use cli::Cli;
 use errors::Error;
 use miniscript::bitcoin::PublicKey;
 use miniscript::iter::TreeLike;
@@ -285,19 +287,18 @@ fn is_maybe_liana(raw_script: Vec<u8>) -> bool {
 }
 
 fn main() {
-    // let url = "http://127.0.0.1:18443";
-    // let auth = Auth::UserPass("pyth".to_string(), "coiner".to_string());
-
-    let url = "http://127.0.0.1:8332";
-    let cookie = "/home/pyth/.liana/bitcoind/datadir/.cookie";
-    let auth = Auth::CookieFile(cookie.into());
-
-    // let url = "http://127.0.0.1:38332";
-    // let cookie = "/home/pyth/.bitcoin/signet/.cookie";
-    // let auth = Auth::CookieFile(cookie.into());
+    let cli = Cli::parse();
+    let url = &cli.ip;
+    let auth = match cli.auth() {
+        Ok(auth) => auth,
+        Err(e) => {
+            println!("{}", e);
+            return;
+        }
+    };
 
     let rpc = Client::new(url, auth).unwrap();
-    let mut runner = BlockRunner::new(rpc, 850_500);
+    let mut runner = BlockRunner::new(rpc, cli.start());
     runner.init().unwrap();
 
     let mut liana_txs = Vec::<(u32, Transaction)>::new();
