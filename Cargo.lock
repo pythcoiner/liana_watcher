@@ -212,9 +212,9 @@ checksum = "8318a53db07bb3f8dca91a600466bdb3f2eaadeedfdbcf02e1accbad9271ba50"
 
 [[package]]
 name = "cc"
-version = "1.1.14"
+version = "1.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50d2eb3cd3d1bf4529e31c215ee6f93ec5a3d536d9f578f93d9d33ee19562932"
+checksum = "57b6a275aa2903740dc87da01c62040406b8812552e97129a63ea8850a17c6e6"
 dependencies = [
  "shlex",
 ]
@@ -343,7 +343,7 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 [[package]]
 name = "miniscript"
 version = "12.2.0"
-source = "git+https://github.com/pythcoiner/rust-miniscript.git?branch=substitute_raw_pkh#25f94f02d775a92a6c319ce23f67d8090885d2c0"
+source = "git+https://github.com/pythcoiner/rust-miniscript.git?branch=substitute_raw_pkh#6ebf97352835b9382cc83e86080168cbeab00240"
 dependencies = [
  "bech32 0.11.0",
  "bitcoin 0.32.2",
