@@ -1,8 +1,8 @@
 mod cli;
 mod errors;
 
-use bitcoin::{Block, Transaction};
-use bitcoincore_rpc::{bitcoin, Auth, Client, RpcApi};
+use bitcoin::{Amount, Block, Transaction};
+use bitcoincore_rpc::{Client, RpcApi};
 use clap::Parser as _;
 use cli::Cli;
 use errors::Error;
@@ -12,8 +12,11 @@ use miniscript::policy::{Liftable, Semantic};
 use miniscript::{ExtParams, Miniscript, Segwitv0, Terminal};
 use std::collections::hash_map::Entry;
 use std::collections::{BTreeMap, HashMap};
-use std::thread;
+use std::fs::File;
+use std::io::Write;
+use std::path::PathBuf;
 use std::time::Duration;
+use std::{thread, time};
 
 fn u64_to_spin(step: u64) -> String {
     match step % 4 {
@@ -303,6 +306,10 @@ fn main() {
 
     let mut liana_txs = Vec::<(u32, Transaction)>::new();
 
+    let filename: PathBuf = "liana_txs.txt".into();
+    let mut file = File::create(filename).unwrap();
+    file.write_all(b"test").unwrap();
+
     loop {
         let block = runner.next();
         let timestamp = block.header.time;
@@ -316,19 +323,22 @@ fn main() {
             if !tx.is_coinbase()
                 && tx.input.iter().any(|inp| {
                     if let Some(script) = inp.witness.last() {
-                        if is_maybe_liana(script.to_vec()) {
-                            erase_line();
-                            println!("{}: {}", timestamp, tx.txid());
-                            println!(" ");
-                            true
-                        } else {
-                            false
-                        }
+                        let witness_len = inp.witness.len();
+                        is_maybe_liana(script.to_vec()) && witness_len < 13
                     } else {
                         false
                     }
                 })
             {
+                let amount = tx
+                    .output
+                    .iter()
+                    .fold(Amount::ZERO, |sum, output| sum + output.value);
+                let text = format!("{}:{}:{:?}\n", timestamp, tx.txid(), amount);
+                let _ = file.write_all(text.as_bytes());
+                erase_line();
+                println!("{}:{}:{:?}", timestamp, tx.txid(), amount);
+                println!(" ");
                 liana_txs.push((timestamp, tx))
             }
         }
