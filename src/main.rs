@@ -308,7 +308,6 @@ fn main() {
 
     let filename: PathBuf = "liana_txs.txt".into();
     let mut file = File::create(filename).unwrap();
-    file.write_all(b"test").unwrap();
 
     loop {
         let block = runner.next();
